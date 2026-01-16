@@ -8,11 +8,36 @@ A Claude Code plugin providing specialized development workflows for the AI BotK
 - **5 Commands** for development workflows
 - **3 Skills** for domain knowledge
 
+## Quick Start
+
+See the [Getting Started Guide](GETTING_STARTED.md) for detailed installation and usage instructions.
+
+```bash
+# Clone and install
+git clone https://github.com/aruneshwisdm/aibotkit-claude-plugin.git
+claude plugins add /path/to/aibotkit-claude-plugin
+
+# Run your first review
+cd /path/to/ai-botkit-mono-repo
+claude
+> /full-review
+```
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Getting Started](GETTING_STARTED.md) | Installation, setup, and first steps |
+| [Commands Reference](docs/COMMANDS.md) | Detailed command documentation |
+| [Agents Reference](docs/AGENTS.md) | Agent descriptions and usage |
+| [Skills Reference](docs/SKILLS.md) | Skill documentation |
+| [Workflow Examples](docs/WORKFLOWS.md) | Real-world workflow examples |
+
 ## Installation
 
 ```bash
 # Add the plugin to Claude Code
-claude /plugins add /path/to/aibotkit-claude-plugin
+claude plugins add /path/to/aibotkit-claude-plugin
 ```
 
 ## Commands
@@ -172,6 +197,12 @@ ai-botkit-mono-repo/
 2. Follow the command template structure
 3. Update this README
 4. Bump version in `plugin.json`
+
+## Support
+
+- **Issues:** [GitHub Issues](https://github.com/aruneshwisdm/aibotkit-claude-plugin/issues)
+- **Documentation:** See [docs/](docs/) folder
+- **Claude Code Help:** Run `/help` in Claude Code
 
 ## License
 
