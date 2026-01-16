@@ -4,8 +4,8 @@ A Claude Code plugin providing specialized development workflows for the AI BotK
 
 ## Overview
 
-- **8 Agents** for code review, security auditing, and RAG analysis
-- **4 Commands** for development workflows
+- **10 Agents** for code review, security auditing, accessibility, and architecture analysis
+- **5 Commands** for development workflows
 - **3 Skills** for domain knowledge
 
 ## Installation
@@ -23,6 +23,7 @@ claude /plugins add /path/to/aibotkit-claude-plugin
 | `/next-phase` | 12-phase development lifecycle with discovery and gap analysis |
 | `/deploy-saas` | SaaS deployment checklist and validation |
 | `/test-rag` | RAG engine testing workflow |
+| `/sync-db` | Database schema synchronization and migration workflow |
 
 ### /full-review
 
@@ -68,6 +69,17 @@ Guides development through 12 phases:
 /next-phase --brief requirements.md  # Provide requirements file
 ```
 
+### /sync-db
+
+Database schema synchronization workflow:
+
+```bash
+/sync-db                    # Full schema sync (generate + migrate)
+/sync-db --generate-only    # Only generate migration files
+/sync-db --push             # Push schema directly (dev only)
+/sync-db --studio           # Open Drizzle Studio
+```
+
 ## Agents
 
 ### Review Agents
@@ -76,6 +88,8 @@ Guides development through 12 phases:
 |-------|---------|
 | `nextjs-standards-reviewer` | Next.js 16 App Router patterns, Server/Client components |
 | `api-integration-reviewer` | SaaS ↔ WordPress plugin API consistency |
+| `accessibility-guardian` | WCAG 2.1 AA compliance, keyboard navigation, screen reader support |
+| `architecture-reviewer` | SOLID principles, clean architecture, code coupling analysis |
 
 ### AI Agents
 
