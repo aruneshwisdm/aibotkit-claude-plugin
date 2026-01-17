@@ -116,103 +116,119 @@ git add . && git commit -m "fix: address review findings"
 
 ## /next-phase
 
-Guides development through a 12-phase lifecycle from discovery to deployment.
+Guides development through a 21-phase lifecycle (3 Discovery + 18 SDD phases) with quality gates, test loops, and explicit execution instructions.
 
 ### Usage
 
 ```bash
-# Start from beginning (Phase 1: Discovery)
+# Start from beginning (Phase 0.1: Discovery)
 /next-phase
 
 # Continue from specific phase
 /next-phase 4
-/next-phase 7
+/next-phase 5.6
 
 # Provide requirements document
 /next-phase --brief requirements.md
 /next-phase --brief "Add user authentication with OAuth"
 
-# Skip to implementation (after planning)
-/next-phase --skip-to implementation
+# Component-specific
+/next-phase --component saas
+/next-phase --component wordpress
 ```
 
 ### Options
 
 | Option | Description | Example |
 |--------|-------------|---------|
-| `[phase]` | Phase number (1-12) | `/next-phase 4` |
+| `[phase]` | Phase number | `/next-phase 5.6` |
 | `--brief` | Requirements file or text | `--brief requirements.md` |
-| `--skip-to` | Jump to phase group | `--skip-to implementation` |
-| `--status` | Show current progress | `--status` |
+| `--component` | Target component | `--component saas` |
+| `--skip-discovery` | Skip discovery phases | `--skip-discovery` |
+| `--validate` | Run validation after generation | `--validate` |
+| `--fix` | Auto-fix issues | `--fix` |
 
 ### Phases
 
-#### Discovery Phases (1-3)
+#### Discovery Phases (0.1-0.3)
 
 | Phase | Name | Purpose |
 |-------|------|---------|
-| 1 | Codebase Discovery | Index and understand existing code |
-| 2 | Documentation Review | Identify documentation gaps |
-| 3 | Gap Analysis | Compare current state vs requirements |
+| 0.1 | Codebase Discovery | Index existing code, generate `_project_specs/DISCOVERY_REPORT.md` |
+| 0.2 | Documentation Recovery | Fill missing docs, generate `specs/RECOVERED_*.md` |
+| 0.3 | Gap Analysis | Compare current vs requirements, generate `reports/GAP_ANALYSIS.md` |
 
-#### Planning Phases (4-6)
-
-| Phase | Name | Purpose |
-|-------|------|---------|
-| 4 | Requirements | Document detailed specifications |
-| 5 | Architecture | Design system extensions |
-| 6 | Specification | Write technical specs |
-
-#### Implementation Phases (7-12)
+#### SDD Phases (0-12)
 
 | Phase | Name | Purpose |
 |-------|------|---------|
-| 7 | Implementation | Build the feature |
-| 8 | Testing | Write and run tests |
+| 0 | Project Init | Ensure CLAUDE.md and CONSTITUTION.md exist |
+| 0.5 | Clarification | Refine requirements with user |
+| 1 | Estimation | Effort estimation with gap analysis credits |
+| 2 | Analysis | Requirements analysis |
+| 3 | Design | UI/UX design |
+| 4 | Architecture | System architecture (EXTEND mode) |
+| 5 | Specification | Technical specifications |
+| 5.5 | Cross-Analysis | Cross-artifact consistency check |
+| 5.6 | Req-Spec Validation | **GATE:** Must pass before coding |
+| 5.7 | Manual Test Cases | Generate new + regression test cases |
+| 5.8 | Dependency Collection | **GATE:** All deps must be available |
+| 6 | Coding | Implementation (EXTEND mode) |
+| 6.5 | Spec Validation | Verify implementation matches specs |
+| 7 | Testing | Write unit, integration, E2E tests |
+| 8 | Test & Fix Loop | **LOOP:** Run tests, fix bugs until 100% pass |
 | 9 | Code Review | Run `/full-review` |
-| 10 | Documentation | Update documentation |
-| 11 | Pre-Deployment | Final validation checks |
-| 12 | Deployment | Deploy to production |
+| 10 | Fix & Validate | **LOOP:** Fix issues until quality threshold |
+| 11 | Documentation | Run `/update-docs` |
+| 12 | Deployment | Deployment validation |
+
+### Quality Gates
+
+| Gate | Phase | Requirement |
+|------|-------|-------------|
+| Req-Spec Validation | 5.6 | 100% requirement coverage by specs |
+| Dependency Collection | 5.8 | All dependencies available |
+| Test & Fix Loop | 8 | 100% tests passing |
+| Review & Fix Loop | 10 | Quality threshold met |
 
 ### Phase Outputs
 
-Each phase produces specific artifacts:
-
 ```
-Phase 1 → codebase-index.md
-Phase 2 → documentation-gaps.md
-Phase 3 → gap-analysis.md
-Phase 4 → requirements-spec.md
-Phase 5 → architecture-design.md
-Phase 6 → technical-spec.md
-Phase 7 → implementation (code)
-Phase 8 → test-results.md
-Phase 9 → review-report.md
-Phase 10 → updated documentation
-Phase 11 → pre-deploy-checklist.md
-Phase 12 → deployment-report.md
+Phase 0.1 → _project_specs/DISCOVERY_REPORT.md
+Phase 0.3 → reports/GAP_ANALYSIS.md
+Phase 5 → specs/SPECIFICATION.md
+Phase 5.6 → reports/REQ_SPEC_VALIDATION.md
+Phase 5.7 → tests/TEST_CASES.md, tests/REGRESSION_TEST_CASES.md
+Phase 6 → src/ (extended code)
+Phase 7 → tests/e2e/, tests/unit/, tests/integration/
+Phase 8 → reports/TEST_EXECUTION.md, reports/BUG_FIX_LOG.md
+Phase 9 → reports/REVIEW.md
+Phase 11 → Updated README.md, CHANGELOG.md
+Phase 12 → reports/DEPLOYMENT_CHECKLIST.md
 ```
 
 ### Examples
 
 **New Feature Development:**
 ```bash
-# Start discovery
+# Start with discovery
 /next-phase
-# Output: Codebase analysis complete. Proceed to Phase 2?
+# Output: Discovery complete. 127 files indexed.
 
-/next-phase 2
-# Output: Documentation gaps identified. Proceed to Phase 3?
+# Continue through phases
+/next-phase 0.5
+# Output: Requirements clarified.
 
 # Continue through all phases...
 ```
 
-**Quick Implementation:**
+**Continue from Specific Phase:**
 ```bash
-# Skip discovery if you know the codebase
-/next-phase --brief "Add chatbot templates feature" --skip-to implementation
+# Jump to implementation after planning
+/next-phase 6
 
-# This starts at Phase 7 with your requirements
+# Run quality gate validation
+/next-phase 5.6
 ```
 
 ---

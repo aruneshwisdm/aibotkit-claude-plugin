@@ -64,7 +64,7 @@ claude
 > /next-phase
 ```
 
-This guides you through 12 phases from discovery to deployment.
+This guides you through 21 phases (3 discovery + 18 SDD) with quality gates and test loops.
 
 ## Core Commands
 

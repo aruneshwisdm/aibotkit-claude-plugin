@@ -622,7 +622,7 @@ Synchronizes GitBook documentation with SaaS and WordPress codebases to keep doc
 **When Invoked:**
 - `/update-docs` (always)
 - `/update-docs --validate`
-- `/next-phase 10` (Documentation phase)
+- `/next-phase 11` (Documentation phase)
 
 ---
 

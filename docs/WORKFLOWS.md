@@ -20,26 +20,28 @@ Real-world workflow examples using the AI BotKit Engineering Plugin.
 
 **Scenario:** Adding a chatbot templates feature that lets users create chatbots from pre-built templates.
 
-### Phase 1-3: Discovery
+### Phase 0.1-0.3: Discovery
 
 ```bash
 # Start discovery
 claude
 > /next-phase
 
-# Claude analyzes codebase and identifies:
-# - Existing chatbot creation flow
-# - Database schema structure
-# - API endpoint patterns
-# - UI component patterns
+# Phase 0.1: Claude indexes codebase and generates:
+# - _project_specs/DISCOVERY_REPORT.md
+# - _project_specs/saas-index.md
+# - _project_specs/wordpress-index.md
+
+# Phase 0.2: Documentation Recovery (if needed)
+# Phase 0.3: Gap Analysis
 ```
 
-**Output:** Codebase understanding, existing patterns documented.
+**Output:** Codebase indexed, gaps identified.
 
-### Phase 4: Requirements
+### Phase 0.5-1: Clarification & Estimation
 
 ```bash
-> /next-phase 4
+> /next-phase 0.5
 
 # Provide requirements
 > /next-phase --brief "Users should be able to:
@@ -47,19 +49,21 @@ claude
 > 2. Preview a template before using it
 > 3. Create a chatbot from a template
 > 4. Templates should include: name, description, personality, style"
+
+> /next-phase 1  # Estimation with gap analysis credits
 ```
 
-**Output:** `requirements-spec.md` with detailed user stories.
+**Output:** Refined requirements, effort estimates.
 
-### Phase 5: Architecture
+### Phase 2-4: Analysis, Design & Architecture
 
 ```bash
-> /next-phase 5
+> /next-phase 4
 ```
 
 **Output:**
 ```markdown
-## Architecture Design
+## Architecture Design (EXTEND Mode)
 
 ### Database Changes
 - New table: `aibotkit_templates`
@@ -76,22 +80,22 @@ claude
 - CreateFromTemplate - Creation flow
 ```
 
-### Phase 6: Specification
+### Phase 5-5.8: Specification & Quality Gates
+
+```bash
+> /next-phase 5    # Technical specifications
+> /next-phase 5.5  # Cross-artifact consistency
+> /next-phase 5.6  # GATE: Req-Spec Validation (must pass!)
+> /next-phase 5.7  # Generate test cases (new + regression)
+> /next-phase 5.8  # GATE: Dependency collection
+```
+
+**Output:** specs/SPECIFICATION.md, tests/TEST_CASES.md
+
+### Phase 6-6.5: Implementation
 
 ```bash
 > /next-phase 6
-```
-
-**Output:** Technical specification with:
-- Database schema definition
-- API request/response schemas
-- Component props and state
-- Error handling strategy
-
-### Phase 7: Implementation
-
-```bash
-> /next-phase 7
 ```
 
 **Implementation Steps:**
@@ -118,38 +122,36 @@ claude
 > Build the template gallery component
 
 # Claude creates components with proper patterns
+
+> /next-phase 6.5  # Verify implementation matches specs
 ```
 
-### Phase 8: Testing
+### Phase 7-8: Testing & Fix Loop
 
 ```bash
-> /next-phase 8
+> /next-phase 7  # Write all tests (unit, integration, E2E)
 
-# Claude generates tests:
-# - API endpoint tests
-# - Component tests
-# - Integration tests
+> /next-phase 8  # LOOP: Run tests, fix bugs until 100% pass
+# This loops automatically:
+# - Run all tests
+# - Fix failures (prioritize regression)
+# - Re-run until 100% pass
 ```
 
-### Phase 9: Code Review
+### Phase 9-10: Code Review & Fix Loop
 
 ```bash
 > /next-phase 9
 # This automatically runs /full-review
 
-# Review output shows:
-# - Any pattern violations
-# - Security issues
-# - Accessibility problems
-# - Architecture concerns
+> /next-phase 10  # LOOP: Fix issues until quality threshold met
 ```
 
-### Phase 10-12: Documentation & Deployment
+### Phase 11-12: Documentation & Deployment
 
 ```bash
-> /next-phase 10  # Update docs
-> /next-phase 11  # Pre-deployment checks
-> /next-phase 12  # Deploy
+> /next-phase 11  # Runs /update-docs
+> /next-phase 12  # Deployment validation
 # Or directly: /deploy-saas
 ```
 
