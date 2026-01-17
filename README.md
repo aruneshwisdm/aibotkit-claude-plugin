@@ -4,8 +4,8 @@ A Claude Code plugin providing specialized development workflows for the AI BotK
 
 ## Overview
 
-- **22 Agents** for code review, testing, security auditing, accessibility, architecture analysis, orchestration, and documentation sync
-- **6 Commands** for development workflows
+- **28 Agents** for code review, testing, security auditing, accessibility, architecture analysis, orchestration, spec recovery, and documentation sync
+- **7 Commands** for development workflows
 - **5 Skills** for domain knowledge and orchestration
 
 ## Quick Start
@@ -46,6 +46,7 @@ claude plugins add /path/to/aibotkit-claude-plugin
 |---------|-------------|
 | `/full-review` | Comprehensive multi-agent code review for SaaS and WordPress plugin |
 | `/next-phase` | 21-phase development lifecycle with discovery, SDD methodology, and quality gates |
+| `/fit-quality` | 8-phase quality artifacts generator for existing codebases (specs, docs, tests) |
 | `/deploy-saas` | SaaS deployment checklist and validation |
 | `/test-rag` | RAG engine testing workflow |
 | `/sync-db` | Database schema synchronization and migration workflow |
@@ -93,6 +94,35 @@ Guides development through 21 phases (3 Discovery + 18 SDD):
 /next-phase 4            # Continue from phase 4
 /next-phase --brief requirements.md  # Provide requirements file
 ```
+
+### /fit-quality
+
+Generates comprehensive quality artifacts for existing codebases WITHOUT modifying source code:
+
+**8 Phases:**
+1. Platform Detection - Detect SaaS (Next.js) and/or WordPress components
+2. Discovery Report - Full codebase analysis
+3. Specification Recovery - Reverse-engineer requirements from code
+4. Data & API Contracts - Document database schema and API contracts
+5. User Documentation - Generate README, USER_GUIDE, CONFIGURATION
+6. Developer Documentation - Generate DEVELOPER guide, API reference
+7. Manual Test Cases - Generate QA test scenarios
+8. Automated Test Cases - Generate unit/integration/E2E tests
+
+```bash
+/fit-quality                    # Run all phases
+/fit-quality --phase 3          # Start from phase 3
+/fit-quality --component saas   # Only analyze SaaS
+/fit-quality --skip-tests       # Skip test generation phases
+```
+
+Output artifacts:
+- `_project_specs/DISCOVERY_REPORT.md`
+- `specs/RECOVERED_SPECIFICATION.md`
+- `specs/contracts/*.md` (API contracts)
+- `docs/USER_GUIDE.md`, `docs/DEVELOPER.md`, `docs/API.md`
+- `tests/manual/MANUAL_TEST_CASES.md`
+- `tests/unit/*.test.ts`, `tests/e2e/*.spec.ts`
 
 ### /sync-db
 
@@ -166,13 +196,19 @@ Syncs:
 |-------|---------|
 | `code-capability-indexer` | Index codebase capabilities for gap analysis |
 
-### Orchestration Agents (3)
+### Orchestration Agents (9)
 
 | Agent | Purpose |
 |-------|---------|
 | `gap-analyzer` | Compare current capabilities vs requirements |
 | `requirements-spec-validator` | Validate spec coverage of requirements (quality gate) |
 | `test-case-generator` | Generate manual test cases from specifications |
+| `spec-recovery-agent` | Reverse-engineer specifications from existing code |
+| `data-modeler` | Generate data model documentation from Drizzle/WordPress schemas |
+| `api-contract-generator` | Generate API contracts from Next.js routes and WordPress REST endpoints |
+| `documentation-generator` | Generate user/developer documentation (README, USER_GUIDE, DEVELOPER) |
+| `manual-test-generator` | Generate comprehensive manual QA test scenarios |
+| `api-docs-generator` | Generate detailed API reference documentation with SDK examples |
 
 ### Testing Agents (5)
 

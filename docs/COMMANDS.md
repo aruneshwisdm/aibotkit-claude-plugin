@@ -8,6 +8,7 @@ Complete reference for all AI BotKit Engineering Plugin commands.
 |---------|-------------|----------|
 | `/full-review` | Multi-agent code review | Pre-PR validation |
 | `/next-phase` | Development lifecycle | Feature development |
+| `/fit-quality` | Quality artifacts generator | Existing codebase documentation |
 | `/deploy-saas` | Deployment workflow | Production releases |
 | `/test-rag` | RAG engine testing | AI feature validation |
 | `/sync-db` | Database synchronization | Schema migrations |
@@ -229,6 +230,145 @@ Phase 12 → reports/DEPLOYMENT_CHECKLIST.md
 
 # Run quality gate validation
 /next-phase 5.6
+```
+
+---
+
+## /fit-quality
+
+Generates comprehensive quality artifacts (specifications, documentation, tests) for existing codebases WITHOUT modifying source code. Ideal for brownfield projects that need documentation or for understanding legacy code.
+
+### Usage
+
+```bash
+# Run all 8 phases
+/fit-quality
+
+# Start from specific phase
+/fit-quality --phase 3
+/fit-quality --phase 5
+
+# Target specific component
+/fit-quality --component saas
+/fit-quality --component wordpress
+
+# Skip test generation phases
+/fit-quality --skip-tests
+
+# Output to custom directory
+/fit-quality --output ./my-specs
+```
+
+### Options
+
+| Option | Description | Example |
+|--------|-------------|---------|
+| `--phase` | Start from phase number | `--phase 3` |
+| `--component` | Target component | `--component saas` |
+| `--skip-tests` | Skip test generation | `--skip-tests` |
+| `--output` | Custom output directory | `--output ./specs` |
+| `--verbose` | Detailed progress output | `--verbose` |
+
+### Phases
+
+| Phase | Name | Output |
+|-------|------|--------|
+| 1 | Platform Detection | Detect SaaS (Next.js) and/or WordPress |
+| 2 | Discovery Report | `_project_specs/DISCOVERY_REPORT.md` |
+| 3 | Specification Recovery | `specs/RECOVERED_SPECIFICATION.md` |
+| 4 | Data & API Contracts | `specs/contracts/*.md` |
+| 5 | User Documentation | `docs/USER_GUIDE.md`, `docs/CONFIGURATION.md` |
+| 6 | Developer Documentation | `docs/DEVELOPER.md`, `docs/API.md` |
+| 7 | Manual Test Cases | `tests/manual/MANUAL_TEST_CASES.md` |
+| 8 | Automated Test Cases | `tests/unit/*.test.ts`, `tests/e2e/*.spec.ts` |
+
+### Agents Invoked
+
+1. **spec-recovery-agent** - Reverse-engineers requirements from code
+2. **data-modeler** - Documents database schema and relationships
+3. **api-contract-generator** - Generates API contracts from routes
+4. **documentation-generator** - Creates user and developer docs
+5. **manual-test-generator** - Generates QA test scenarios
+6. **api-docs-generator** - Creates detailed API reference
+
+### Output Structure
+
+```
+project/
+├── _project_specs/
+│   └── DISCOVERY_REPORT.md       # Phase 2
+├── specs/
+│   ├── RECOVERED_SPECIFICATION.md  # Phase 3
+│   └── contracts/
+│       ├── chat-api.md           # Phase 4
+│       ├── chatbots-api.md
+│       └── documents-api.md
+├── docs/
+│   ├── README.md                 # Phase 5
+│   ├── USER_GUIDE.md
+│   ├── CONFIGURATION.md
+│   ├── DEVELOPER.md              # Phase 6
+│   └── API.md
+└── tests/
+    ├── manual/
+    │   └── MANUAL_TEST_CASES.md  # Phase 7
+    ├── unit/                     # Phase 8
+    │   └── *.test.ts
+    └── e2e/
+        └── *.spec.ts
+```
+
+### Example Output
+
+**RECOVERED_SPECIFICATION.md:**
+```markdown
+# AI BotKit Recovered Specification
+
+## Functional Requirements
+
+### FR-001: Chat Messaging
+- Users can send messages to chatbots
+- Responses stream in real-time via SSE
+- Conversation history maintained per session
+
+### FR-010: Chatbot Management
+- Create, update, delete chatbots
+- Configure appearance (colors, position, avatar)
+- Set system prompts and welcome messages
+
+## Non-Functional Requirements
+
+### NFR-001: Performance
+- Chat response first token <1 second
+- Page load <3 seconds
+```
+
+### Examples
+
+**Document Existing Codebase:**
+```bash
+# Generate all artifacts for undocumented project
+cd /path/to/legacy-project
+/fit-quality
+
+# Review generated specs
+cat _project_specs/DISCOVERY_REPORT.md
+cat specs/RECOVERED_SPECIFICATION.md
+```
+
+**Generate Only Documentation:**
+```bash
+# Skip test generation, focus on docs
+/fit-quality --skip-tests
+
+# Generate docs for specific component
+/fit-quality --component saas --skip-tests
+```
+
+**Resume from Specific Phase:**
+```bash
+# Already have discovery, continue from specs
+/fit-quality --phase 3
 ```
 
 ---

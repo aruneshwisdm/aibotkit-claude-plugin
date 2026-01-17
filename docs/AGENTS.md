@@ -4,15 +4,18 @@ Complete reference for all AI BotKit Engineering Plugin agents.
 
 ## Overview
 
-The plugin includes 11 specialized agents organized by category:
+The plugin includes 28 specialized agents organized by category:
 
 | Category | Agents | Purpose |
 |----------|--------|---------|
-| Review | 4 | Code standards and architecture |
+| Review | 5 | Code standards, architecture, and fixes |
 | AI | 1 | RAG and AI implementation |
 | Database | 1 | Schema and query patterns |
 | Security | 2 | Security auditing |
-| WordPress | 2 | WordPress standards |
+| WordPress | 3 | WordPress standards and hooks |
+| Architecture | 1 | Codebase capability indexing |
+| Orchestration | 9 | Workflow coordination and artifact generation |
+| Testing | 5 | Test writing, execution, and bug fixing |
 | Documentation | 1 | Documentation sync and validation |
 
 ---
@@ -553,6 +556,290 @@ $wpdb->query($wpdb->prepare(
 **When Invoked:**
 - `/full-review` (always)
 - `/full-review --component wordpress --focus security`
+
+---
+
+## Orchestration Agents
+
+### gap-analyzer
+
+Compares current codebase capabilities against requirements to identify gaps.
+
+**What It Analyzes:**
+
+| Input | Analysis |
+|-------|----------|
+| Requirements doc | Extract required features |
+| DISCOVERY_REPORT.md | Extract current capabilities |
+| Source code | Verify implementation exists |
+
+**Output:** `reports/GAP_ANALYSIS.md` with coverage metrics and missing features.
+
+**When Invoked:**
+- `/next-phase 0.3` (Gap Analysis phase)
+- Manual gap analysis requests
+
+---
+
+### requirements-spec-validator
+
+Validates that specifications cover all requirements (quality gate).
+
+**What It Checks:**
+
+| Check | Criteria |
+|-------|----------|
+| Coverage | Every FR/NFR has matching spec section |
+| Traceability | Specs reference requirement IDs |
+| Completeness | No orphaned requirements |
+
+**Output:** `reports/REQ_SPEC_VALIDATION.md` with pass/fail status.
+
+**When Invoked:**
+- `/next-phase 5.6` (Quality gate before coding)
+
+---
+
+### test-case-generator
+
+Generates manual test cases from specifications.
+
+**What It Generates:**
+
+- User acceptance test scenarios
+- Edge case test scenarios
+- Regression test cases
+- Test data requirements
+
+**Output:** `tests/TEST_CASES.md`, `tests/REGRESSION_TEST_CASES.md`
+
+**When Invoked:**
+- `/next-phase 5.7` (Test case generation phase)
+
+---
+
+### spec-recovery-agent
+
+Reverse-engineers specifications from existing code for undocumented projects.
+
+**What It Analyzes:**
+
+| Source | Extracted |
+|--------|-----------|
+| API routes | Endpoint documentation, request/response schemas |
+| Database schema | Data model, relationships |
+| UI components | User-facing features |
+| Business logic | Functional requirements |
+| Config/env | Non-functional requirements |
+
+**Output:** `specs/RECOVERED_SPECIFICATION.md` with FR-xxx and NFR-xxx requirements.
+
+**Example Output:**
+```markdown
+### FR-001: Chat Messaging
+**Source:** src/app/api/chat/route.ts
+- Users can send messages to chatbots
+- Responses stream via Server-Sent Events
+- Rate limited per plan tier
+```
+
+**When Invoked:**
+- `/fit-quality` (Phase 3)
+
+---
+
+### data-modeler
+
+Generates data model documentation from Drizzle ORM schema and WordPress data structures.
+
+**What It Analyzes:**
+
+| Source | Output |
+|--------|--------|
+| Drizzle schema.ts | Table documentation, ER diagrams |
+| Relations config | Relationship documentation |
+| WordPress options | Options schema documentation |
+| Indexes | Index documentation |
+
+**Output:** ER diagrams in Mermaid format, table documentation, relationship maps.
+
+**Example Output:**
+```mermaid
+erDiagram
+    users ||--o{ chatbots : "creates"
+    chatbots ||--o{ conversations : "has"
+    conversations ||--o{ messages : "contains"
+```
+
+**When Invoked:**
+- `/fit-quality` (Phase 4)
+- `/next-phase 4` (Architecture phase)
+
+---
+
+### api-contract-generator
+
+Generates API contract documentation from Next.js route handlers and WordPress REST endpoints.
+
+**What It Extracts:**
+
+| Source | Documentation |
+|--------|--------------|
+| Route handlers | HTTP methods, paths, parameters |
+| Zod schemas | Request/response validation |
+| Auth middleware | Authentication requirements |
+| Rate limiters | Rate limiting rules |
+
+**Output:** `specs/contracts/*.md` with OpenAPI-style documentation.
+
+**Example Output:**
+```markdown
+### POST /api/chat
+
+**Authentication:** Optional (supports guest users)
+
+**Request:**
+```typescript
+interface ChatRequest {
+  chatbotId: string;
+  message: string;
+  conversationId?: string;
+}
+```
+
+**Response:** Server-Sent Events stream
+```
+
+**When Invoked:**
+- `/fit-quality` (Phase 4)
+
+---
+
+### documentation-generator
+
+Generates comprehensive user and developer documentation.
+
+**What It Generates:**
+
+| Document | Content |
+|----------|---------|
+| README.md | Project overview, quick start |
+| USER_GUIDE.md | End-user documentation |
+| DEVELOPER.md | Developer setup, architecture |
+| CONFIGURATION.md | Environment variables, settings |
+| CONTRIBUTING.md | Contribution guidelines |
+
+**When Invoked:**
+- `/fit-quality` (Phases 5-6)
+- `/update-docs`
+
+---
+
+### manual-test-generator
+
+Generates comprehensive manual test scenarios for QA testers.
+
+**What It Generates:**
+
+| Category | Tests |
+|----------|-------|
+| User Journeys | End-to-end workflow tests |
+| Feature Tests | Individual feature verification |
+| Integration Tests | Cross-system scenarios |
+| Accessibility Tests | WCAG 2.1 AA compliance |
+| Security Tests | Manual security verification |
+| Performance Tests | User-perceived performance |
+
+**Output:** `tests/manual/MANUAL_TEST_CASES.md` with prioritized test cases.
+
+**Example Output:**
+```markdown
+### UJ-001: New User Signup to First Chat
+
+**Priority:** P0 (Critical)
+**Estimated Time:** 10 minutes
+
+| Step | Action | Expected Result |
+|------|--------|-----------------|
+| 1 | Navigate to signup | Signup form displays |
+| 2 | Enter credentials | Form accepts input |
+| 3 | Click "Create Account" | Redirect to dashboard |
+```
+
+**When Invoked:**
+- `/fit-quality` (Phase 7)
+
+---
+
+### api-docs-generator
+
+Generates detailed API reference documentation with SDK examples.
+
+**What It Generates:**
+
+| Document | Content |
+|----------|---------|
+| docs/API.md | Complete API reference |
+| docs/RAG_ENGINE.md | RAG internals documentation |
+| docs/DATABASE.md | Database documentation |
+| docs/WORDPRESS_HOOKS.md | WordPress hooks reference |
+
+**SDK Examples Generated:**
+- JavaScript/TypeScript
+- Python
+- cURL
+
+**When Invoked:**
+- `/fit-quality` (Phase 6)
+
+---
+
+## Testing Agents
+
+### unit-test-writer
+
+Writes Vitest unit tests with proper mocking for Drizzle, Stripe, and Pinecone.
+
+**When Invoked:**
+- `/next-phase 7` (Testing phase)
+- `/fit-quality` (Phase 8)
+
+---
+
+### e2e-test-generator
+
+Generates Playwright E2E tests for user flows.
+
+**When Invoked:**
+- `/next-phase 7` (Testing phase)
+- `/fit-quality` (Phase 8)
+
+---
+
+### integration-test-specialist
+
+Writes integration tests for API, database, and external services.
+
+**When Invoked:**
+- `/next-phase 7` (Testing phase)
+
+---
+
+### e2e-test-runner
+
+Executes tests, parses failures, and coordinates fixes.
+
+**When Invoked:**
+- `/next-phase 8` (Test & Fix loop)
+
+---
+
+### bug-fixer
+
+Analyzes test failures and implements fixes.
+
+**When Invoked:**
+- `/next-phase 8` (Test & Fix loop)
 
 ---
 

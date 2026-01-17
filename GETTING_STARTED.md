@@ -33,7 +33,7 @@ claude plugins add github:aruneshwisdm/aibotkit-claude-plugin
 claude plugins list
 
 # You should see:
-# - aibotkit-engineering (v1.1.0)
+# - aibotkit-engineering (v1.6.0)
 ```
 
 ## Quick Start
@@ -72,6 +72,7 @@ This guides you through 21 phases (3 discovery + 18 SDD) with quality gates and 
 |---------|--------------|-------------|
 | `/full-review` | Multi-agent code review | Before PRs, after major changes |
 | `/next-phase` | Development lifecycle | Starting new features |
+| `/fit-quality` | Generate specs, docs, tests | Documenting existing codebases |
 | `/deploy-saas` | Deployment checklist | Before production deployments |
 | `/test-rag` | RAG engine testing | After RAG changes |
 | `/sync-db` | Database migrations | After schema changes |
@@ -250,6 +251,23 @@ Target specific components:
 
 # 3. Verify schema
 > /sync-db --studio
+```
+
+### Documenting Existing Codebase
+
+```bash
+# 1. Run fit-quality to generate all artifacts
+> /fit-quality
+
+# 2. Review generated specifications
+cat specs/RECOVERED_SPECIFICATION.md
+
+# 3. Review generated documentation
+cat docs/USER_GUIDE.md
+cat docs/DEVELOPER.md
+
+# 4. Review generated test cases
+cat tests/manual/MANUAL_TEST_CASES.md
 ```
 
 ### Updating Documentation
