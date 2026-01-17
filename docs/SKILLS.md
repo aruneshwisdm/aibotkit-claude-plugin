@@ -8,9 +8,86 @@ Skills provide domain knowledge and best practices that Claude Code uses when he
 
 | Skill | Purpose | Use Case |
 |-------|---------|----------|
+| `next-phase` | 21-phase development lifecycle orchestrator | Feature development |
 | `rag-development` | RAG patterns and best practices | Building AI features |
 | `drizzle-patterns` | Drizzle ORM patterns | Database operations |
 | `nextjs-saas` | Next.js SaaS patterns | SaaS development |
+
+---
+
+## next-phase
+
+**User Invocable:** `/next-phase`
+
+Development lifecycle orchestrator that guides you through 21 phases of spec-driven development with automatic state management and quality gates.
+
+### Invocation
+
+```bash
+/next-phase                    # Start from Phase 0.1 or resume
+/next-phase 5.6                # Jump to specific phase
+/next-phase --brief "Add PDF export"  # Start with requirements brief
+/next-phase --status           # Show current progress
+/next-phase --reset            # Reset and start fresh
+```
+
+### Phase Overview
+
+| Block | Phases | Purpose |
+|-------|--------|---------|
+| **Discovery** | 0.1-0.3 | Understand existing codebase |
+| **Planning** | 0-2 | Requirements and estimation |
+| **Design** | 3-4 | UI and architecture |
+| **Specification** | 5-5.8 | Technical specs with quality gates |
+| **Implementation** | 6-6.5 | Coding with validation |
+| **Testing** | 7-8 | Write and run tests (100% pass loop) |
+| **Quality** | 9-10 | Review and fix (threshold loop) |
+| **Finalization** | 11-12 | Documentation and deployment |
+
+### Quality Gates
+
+| Gate | Phase | Pass Criteria |
+|------|-------|---------------|
+| Req-Spec Validation | 5.6 | 100% requirements have specifications |
+| Dependency Collection | 5.8 | All dependencies available/installable |
+| Test Execution | 8 | 100% tests pass (loop until achieved) |
+| Code Review | 10 | No Critical/High severity issues |
+
+### State Management
+
+State is persisted in `_project_specs/.next-phase-state.json`:
+
+```json
+{
+  "currentPhase": "5.7",
+  "completedPhases": ["0.1", "0.2", "0.3", "0", "0.5", "1", "2", "3", "4", "5", "5.5", "5.6"],
+  "brief": "Add PDF export for conversations",
+  "gateResults": {
+    "5.6": { "passed": true, "coverage": "100%" }
+  },
+  "artifacts": ["_project_specs/DISCOVERY_REPORT.md", "specs/SPECIFICATION.md"]
+}
+```
+
+### When This Skill Applies
+
+- Starting new feature development
+- Continuing existing development
+- Following spec-driven development methodology
+- Ensuring quality gates are met
+
+### Example Usage
+
+```bash
+> /next-phase --brief "Add analytics dashboard"
+
+# Claude orchestrates through:
+# 1. Codebase discovery (existing analytics code?)
+# 2. Gap analysis (what exists vs what's needed)
+# 3. Planning phases with reuse credits
+# 4. Implementation with quality gates
+# 5. Test & fix loops until 100% pass
+```
 
 ---
 
@@ -479,6 +556,7 @@ Skills are automatically activated when you work on related code:
 
 | Task | Skills Used |
 |------|-------------|
+| Feature development | `next-phase` |
 | Building chat features | `rag-development`, `nextjs-saas` |
 | Database changes | `drizzle-patterns` |
 | API development | `nextjs-saas`, `drizzle-patterns` |

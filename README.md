@@ -6,7 +6,7 @@ A Claude Code plugin providing specialized development workflows for the AI BotK
 
 - **22 Agents** for code review, testing, security auditing, accessibility, architecture analysis, orchestration, and documentation sync
 - **6 Commands** for development workflows
-- **3 Skills** for domain knowledge
+- **4 Skills** for domain knowledge and orchestration
 
 ## Quick Start
 
@@ -194,6 +194,7 @@ Syncs:
 
 | Skill | Description |
 |-------|-------------|
+| `next-phase` | 21-phase development lifecycle orchestrator with quality gates |
 | `rag-development` | RAG patterns, vector search, prompt engineering |
 | `nextjs-saas` | Next.js SaaS architecture patterns |
 | `drizzle-patterns` | Drizzle ORM best practices |
