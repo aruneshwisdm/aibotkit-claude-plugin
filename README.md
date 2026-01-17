@@ -4,7 +4,7 @@ A Claude Code plugin providing specialized development workflows for the AI BotK
 
 ## Overview
 
-- **11 Agents** for code review, security auditing, accessibility, architecture analysis, and documentation sync
+- **22 Agents** for code review, testing, security auditing, accessibility, architecture analysis, orchestration, and documentation sync
 - **6 Commands** for development workflows
 - **3 Skills** for domain knowledge
 
@@ -123,7 +123,7 @@ Syncs:
 
 ## Agents
 
-### Review Agents
+### Review Agents (5)
 
 | Agent | Purpose |
 |-------|---------|
@@ -131,34 +131,60 @@ Syncs:
 | `api-integration-reviewer` | SaaS ↔ WordPress plugin API consistency |
 | `accessibility-guardian` | WCAG 2.1 AA compliance, keyboard navigation, screen reader support |
 | `architecture-reviewer` | SOLID principles, clean architecture, code coupling analysis |
+| `code-fixer` | Fix code quality issues from reviews, security fixes, standards compliance |
 
-### AI Agents
+### AI Agents (1)
 
 | Agent | Purpose |
 |-------|---------|
 | `rag-engine-reviewer` | RAG implementation, Pinecone integration, prompt construction |
 
-### Database Agents
+### Database Agents (1)
 
 | Agent | Purpose |
 |-------|---------|
 | `drizzle-schema-reviewer` | Schema design, indexes, migrations, query patterns |
 
-### Security Agents
+### Security Agents (2)
 
 | Agent | Purpose |
 |-------|---------|
 | `saas-security-auditor` | Auth, authorization, XSS, CSRF, API security |
 | `stripe-integration-reviewer` | Payment security, webhooks, PCI compliance |
 
-### WordPress Agents
+### WordPress Agents (3)
 
 | Agent | Purpose |
 |-------|---------|
 | `wordpress-standards-reviewer` | WPCS compliance, i18n, hooks |
 | `wordpress-security-auditor` | SQL injection, XSS, CSRF, capabilities |
+| `wordpress-hooks-analyzer` | Discover and document all WordPress hooks in plugin |
 
-### Documentation Agents
+### Architecture Agents (1)
+
+| Agent | Purpose |
+|-------|---------|
+| `code-capability-indexer` | Index codebase capabilities for gap analysis |
+
+### Orchestration Agents (3)
+
+| Agent | Purpose |
+|-------|---------|
+| `gap-analyzer` | Compare current capabilities vs requirements |
+| `requirements-spec-validator` | Validate spec coverage of requirements (quality gate) |
+| `test-case-generator` | Generate manual test cases from specifications |
+
+### Testing Agents (5)
+
+| Agent | Purpose |
+|-------|---------|
+| `unit-test-writer` | Write Vitest unit tests with mocking for Drizzle, Stripe, Pinecone |
+| `e2e-test-generator` | Generate Playwright E2E tests for user flows |
+| `integration-test-specialist` | Write integration tests for API, DB, external services |
+| `e2e-test-runner` | Execute tests, parse failures, coordinate fixes |
+| `bug-fixer` | Analyze and fix test failures |
+
+### Documentation Agents (1)
 
 | Agent | Purpose |
 |-------|---------|
