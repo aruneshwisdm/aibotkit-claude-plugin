@@ -33,7 +33,7 @@ claude plugins add github:aruneshwisdm/aibotkit-claude-plugin
 claude plugins list
 
 # You should see:
-# - aibotkit-engineering (v1.0.0)
+# - aibotkit-engineering (v1.1.0)
 ```
 
 ## Quick Start
@@ -75,6 +75,7 @@ This guides you through 12 phases from discovery to deployment.
 | `/deploy-saas` | Deployment checklist | Before production deployments |
 | `/test-rag` | RAG engine testing | After RAG changes |
 | `/sync-db` | Database migrations | After schema changes |
+| `/update-docs` | Sync GitBook documentation | After code changes affect docs |
 
 ## Your First Review
 
@@ -249,6 +250,20 @@ Target specific components:
 
 # 3. Verify schema
 > /sync-db --studio
+```
+
+### Updating Documentation
+
+```bash
+# 1. After changing plan limits, features, or pricing
+> /update-docs
+
+# 2. Review proposed changes
+# 3. Apply with confirmation
+> /update-docs --apply
+
+# 4. Validate documentation links
+> /update-docs --validate
 ```
 
 ## Tips for Best Results

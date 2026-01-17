@@ -11,6 +11,7 @@ Complete reference for all AI BotKit Engineering Plugin commands.
 | `/deploy-saas` | Deployment workflow | Production releases |
 | `/test-rag` | RAG engine testing | AI feature validation |
 | `/sync-db` | Database synchronization | Schema migrations |
+| `/update-docs` | Documentation sync | Keep GitBook docs current |
 
 ---
 
@@ -534,6 +535,119 @@ cat src/lib/db/migrations/0008_*.sql
 
 # Apply in production
 /sync-db --env production
+```
+
+---
+
+## /update-docs
+
+Automatically synchronizes GitBook documentation with SaaS and WordPress codebases.
+
+### Usage
+
+```bash
+# Full sync with diff preview
+/update-docs
+
+# Apply changes without confirmation
+/update-docs --apply
+
+# Update specific section only
+/update-docs --section plans
+/update-docs --section features
+
+# Validate only (no changes)
+/update-docs --validate
+
+# Generate API documentation
+/update-docs --generate-api
+
+# Dry run (show what would change)
+/update-docs --dry-run
+```
+
+### Options
+
+| Option | Description | Example |
+|--------|-------------|---------|
+| `--apply` | Apply without confirmation | `--apply` |
+| `--section` | Target specific section | `--section plans` |
+| `--validate` | Validate only | `--validate` |
+| `--generate-api` | Generate API docs | `--generate-api` |
+| `--dry-run` | Preview changes | `--dry-run` |
+
+### What Gets Synced
+
+| Data Source | Target Documentation |
+|-------------|---------------------|
+| `saas/src/lib/checkRateLimit.ts` | Plan limits in `plans-and-billing/*.md` |
+| `saas/docs/plan-limits.md` | Plan descriptions |
+| `wordpress-plugin/readme.txt` | Feature lists |
+| `saas/src/app/api/` | API reference docs |
+
+### Workflow Phases
+
+#### Phase 1: Discovery
+- Extract plan limits from `checkRateLimit.ts`
+- Parse features from code and readme.txt
+- Catalog API endpoints
+
+#### Phase 2: Analysis
+- Compare extracted data with documentation
+- Identify discrepancies
+- Calculate drift score
+
+#### Phase 3: Generation
+- Generate updated documentation sections
+- Preserve existing formatting
+- Update tables and lists
+
+#### Phase 4: Validation
+- Check all internal links
+- Verify image references
+- Validate SUMMARY.md structure
+
+#### Phase 5: Application
+- Show diff preview
+- Apply changes (with `--apply`)
+- Generate update report
+
+### Output Format
+
+```markdown
+## Documentation Sync Report
+
+### Discrepancies Found
+
+| File | Issue | Current | Expected |
+|------|-------|---------|----------|
+| plans-and-billing/upgrading-to-paid-plans.md | Basic messages | 300 | 500 |
+
+### Changes Applied
+- Updated Basic plan messages in 2 files
+- Added missing feature to key-features.md
+
+### Validation Results
+- ✅ 45 internal links valid
+- ✅ 102 images valid
+- ✅ SUMMARY.md complete
+```
+
+### Examples
+
+**Pre-Release Doc Sync:**
+```bash
+# Sync all docs before release
+/update-docs --apply
+
+# Validate everything is correct
+/update-docs --validate
+```
+
+**After Pricing Changes:**
+```bash
+# Update plan limits after changing PLAN_LIMITS constant
+/update-docs --section plans --apply
 ```
 
 ---

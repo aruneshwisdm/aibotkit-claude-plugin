@@ -11,7 +11,8 @@ Real-world workflow examples using the AI BotKit Engineering Plugin.
 | RAG Optimization | `/test-rag`, `/full-review` | Single session |
 | Database Migration | `/sync-db`, `/deploy-saas` | Single session |
 | Security Audit | `/full-review --focus security` | Single session |
-| Pre-Release Review | `/full-review`, `/test-rag`, `/deploy-saas --dry-run` | Single session |
+| Documentation Sync | `/update-docs` | Single session |
+| Pre-Release Review | `/full-review`, `/test-rag`, `/update-docs`, `/deploy-saas --dry-run` | Single session |
 
 ---
 
@@ -479,6 +480,123 @@ claude
 
 ---
 
+## Workflow 8: Documentation Sync
+
+**Scenario:** Plan limits changed in code, need to update GitBook documentation.
+
+### Step 1: Make Code Changes
+
+```bash
+# Edit plan limits in saas/src/lib/checkRateLimit.ts
+vim saas/src/lib/checkRateLimit.ts
+
+# Change Basic plan from 500 to 750 messages
+```
+
+### Step 2: Run Documentation Sync
+
+```bash
+claude
+> /update-docs
+
+# Output:
+## Documentation Analysis
+
+### Discrepancies Found
+
+| File | Issue | Current | Expected |
+|------|-------|---------|----------|
+| plans-and-billing/upgrading-to-paid-plans.md | Basic messages | 500 | 750 |
+| introduction/free-plan-and-upgrades.md | Basic messages | 500 | 750 |
+| introduction/free-plan-and-upgrades.md | Table row | 500 | 750 |
+
+Apply changes? [y/N]
+```
+
+### Step 3: Apply Changes
+
+```bash
+> /update-docs --apply
+
+# Output:
+## Changes Applied
+
+- plans-and-billing/upgrading-to-paid-plans.md: Updated Basic messages
+- introduction/free-plan-and-upgrades.md: Updated Basic messages (2 locations)
+
+All documentation now matches code.
+```
+
+### Step 4: Validate
+
+```bash
+> /update-docs --validate
+
+# Output:
+## Validation Report
+
+✅ 29 documentation files checked
+✅ 0 discrepancies found
+✅ 45 internal links valid
+✅ 102 images valid
+✅ SUMMARY.md complete
+```
+
+### Step 5: Commit Documentation
+
+```bash
+git add documentation/
+git commit -m "docs: update Basic plan limits to 750 messages"
+```
+
+---
+
+## Workflow 9: Pre-Release Documentation Review
+
+**Scenario:** Before a major release, ensure all documentation is accurate.
+
+### Step 1: Sync Documentation
+
+```bash
+claude
+> /update-docs --apply
+
+# Syncs all plan limits, features from code
+```
+
+### Step 2: Validate Links
+
+```bash
+> /update-docs --validate
+
+# Checks:
+# - All internal links work
+# - All images exist
+# - SUMMARY.md is complete
+```
+
+### Step 3: Review Changes
+
+```bash
+# Check git diff for documentation changes
+git diff documentation/
+
+# Review and stage changes
+git add documentation/
+```
+
+### Step 4: Full Pre-Release Check
+
+```bash
+> /full-review
+> /test-rag
+> /deploy-saas --dry-run
+
+# All checks should pass
+```
+
+---
+
 ## Quick Reference
 
 ### Common Command Combinations
@@ -499,8 +617,11 @@ claude
 # RAG optimization
 /test-rag --benchmark → optimize → /test-rag --benchmark
 
+# Documentation sync
+/update-docs → review changes → /update-docs --apply
+
 # Pre-release
-/full-review → /test-rag → /deploy-saas --dry-run → /deploy-saas
+/full-review → /test-rag → /update-docs → /deploy-saas --dry-run → /deploy-saas
 ```
 
 ### Environment-Specific Workflows

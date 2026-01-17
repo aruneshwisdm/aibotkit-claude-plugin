@@ -4,8 +4,8 @@ A Claude Code plugin providing specialized development workflows for the AI BotK
 
 ## Overview
 
-- **10 Agents** for code review, security auditing, accessibility, and architecture analysis
-- **5 Commands** for development workflows
+- **11 Agents** for code review, security auditing, accessibility, architecture analysis, and documentation sync
+- **6 Commands** for development workflows
 - **3 Skills** for domain knowledge
 
 ## Quick Start
@@ -14,7 +14,7 @@ See the [Getting Started Guide](GETTING_STARTED.md) for detailed installation an
 
 ```bash
 # Clone and install
-git clone https://github.com/aruneshwisdm/aibotkit-claude-plugin.git
+git clone https://github.com/WisdmLabs/aibotkit-claude-plugin.git
 claude plugins add /path/to/aibotkit-claude-plugin
 
 # Run your first review
@@ -45,10 +45,11 @@ claude plugins add /path/to/aibotkit-claude-plugin
 | Command | Description |
 |---------|-------------|
 | `/full-review` | Comprehensive multi-agent code review for SaaS and WordPress plugin |
-| `/next-phase` | 12-phase development lifecycle with discovery and gap analysis |
+| `/next-phase` | 21-phase development lifecycle with discovery, SDD methodology, and quality gates |
 | `/deploy-saas` | SaaS deployment checklist and validation |
 | `/test-rag` | RAG engine testing workflow |
 | `/sync-db` | Database schema synchronization and migration workflow |
+| `/update-docs` | Automatic GitBook documentation sync from SaaS/WordPress code |
 
 ### /full-review
 
@@ -70,23 +71,22 @@ Orchestrates 10 specialized agents in parallel to review:
 
 ### /next-phase
 
-Guides development through 12 phases:
+Guides development through 21 phases (3 Discovery + 18 SDD):
 
-**Discovery Phases:**
-1. Codebase Discovery - Index existing code
-2. Documentation Review - Identify doc gaps
-3. Gap Analysis - Compare current vs requirements
+**Discovery Phases (0.1-0.3):**
+- Codebase Discovery - Index existing code
+- Documentation Recovery - Fill missing docs
+- Gap Analysis - Compare current vs requirements
 
-**Implementation Phases:**
-4. Requirements - Document detailed specs
-5. Architecture - Design extensions
-6. Specification - Technical specs
-7. Implementation - Build features
-8. Testing - Write and run tests
-9. Code Review - Run /full-review
-10. Documentation - Update docs
-11. Pre-Deployment - Final checks
-12. Deployment - Deploy to production
+**SDD Phases (0-12):**
+- 0: Project Init - Governance setup
+- 0.5: Clarification - Requirements refinement
+- 1-5: Planning & Specs - Estimation, analysis, design, architecture, specification
+- 5.5-5.8: Quality Gates - Cross-analysis, req-spec validation, test cases, dependencies
+- 6-6.5: Implementation - Coding with spec validation
+- 7-8: Testing - Complete test writing, test & fix loop (until 100% pass)
+- 9-10: Review & Fix - Code review loop (until quality threshold)
+- 11-12: Finalization - Documentation and deployment
 
 ```bash
 /next-phase              # Start from discovery
@@ -104,6 +104,22 @@ Database schema synchronization workflow:
 /sync-db --push             # Push schema directly (dev only)
 /sync-db --studio           # Open Drizzle Studio
 ```
+
+### /update-docs
+
+Automatically sync GitBook documentation with SaaS and WordPress codebases:
+
+```bash
+/update-docs                    # Full sync with diff preview
+/update-docs --apply            # Apply changes without confirmation
+/update-docs --section plans    # Update only plans & billing docs
+/update-docs --validate         # Validate only, no changes
+```
+
+Syncs:
+- Plan limits from `saas/src/lib/checkRateLimit.ts`
+- Features from code and `wordpress-plugin/readme.txt`
+- Validates all internal links and image references
 
 ## Agents
 
@@ -141,6 +157,12 @@ Database schema synchronization workflow:
 |-------|---------|
 | `wordpress-standards-reviewer` | WPCS compliance, i18n, hooks |
 | `wordpress-security-auditor` | SQL injection, XSS, CSRF, capabilities |
+
+### Documentation Agents
+
+| Agent | Purpose |
+|-------|---------|
+| `documentation-updater` | Sync GitBook docs with code, validate links, update plan limits |
 
 ## Skills
 
@@ -200,7 +222,7 @@ ai-botkit-mono-repo/
 
 ## Support
 
-- **Issues:** [GitHub Issues](https://github.com/aruneshwisdm/aibotkit-claude-plugin/issues)
+- **Issues:** [GitHub Issues](https://github.com/WisdmLabs/aibotkit-claude-plugin/issues)
 - **Documentation:** See [docs/](docs/) folder
 - **Claude Code Help:** Run `/help` in Claude Code
 

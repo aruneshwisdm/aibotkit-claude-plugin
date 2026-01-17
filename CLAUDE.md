@@ -17,12 +17,14 @@ aibotkit-claude-plugin/
 ├── agents/
 │   ├── ai/                      # AI/RAG-specific agents
 │   ├── database/                # Database review agents
+│   ├── documentation/           # Documentation sync agents
 │   ├── review/                  # General code review agents
 │   ├── security/                # Security audit agents
 │   └── wordpress/               # WordPress-specific agents
 ├── commands/
 │   ├── deployment-workflow/     # Deployment commands
 │   ├── development-workflow/    # Development lifecycle commands
+│   ├── documentation-workflow/  # Documentation sync commands
 │   ├── review-workflow/         # Code review commands
 │   └── testing-workflow/        # Testing commands
 ├── skills/
@@ -190,4 +192,18 @@ Commands are invoked via slash commands:
 ```
 /full-review
 /next-phase
+/update-docs
 ```
+
+## Documentation Sync
+
+The `/update-docs` command syncs GitBook documentation with code:
+
+| Source | Target |
+|--------|--------|
+| `saas/src/lib/checkRateLimit.ts` | Plan limits in `documentation/plans-and-billing/` |
+| `wordpress-plugin/readme.txt` | Features in `documentation/introduction/` |
+
+The documentation is located at:
+- **Monorepo:** `ai-botkit-mono-repo/documentation/`
+- **GitBook URL:** `https://aibotkit.gitbook.io/documentation`

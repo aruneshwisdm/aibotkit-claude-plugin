@@ -1,14 +1,14 @@
 {
   "name": "aibotkit-engineering",
-  "version": "1.0.0",
-  "description": "AI BotKit SaaS + WordPress plugin development workflows. 10 agents, 5 commands, 3 skills. Commands: /full-review (comprehensive multi-agent code review for SaaS and WordPress plugin), /next-phase (phased development lifecycle with discovery, gap analysis, and SDD methodology), /deploy-saas (deployment checklist and validation), /test-rag (RAG engine testing workflow), /sync-db (database synchronization workflow). Agents for: Next.js/React standards, RAG engine review, Drizzle schema, Stripe integration, WordPress plugin, security auditing, accessibility compliance, architecture review. Skills for: RAG development patterns, Next.js SaaS architecture, Drizzle ORM patterns.",
+  "version": "1.2.0",
+  "description": "AI BotKit SaaS + WordPress plugin development workflows. 11 agents, 6 commands, 3 skills. Commands: /full-review (comprehensive multi-agent code review for SaaS and WordPress plugin), /next-phase (21-phase development lifecycle with discovery, gap analysis, SDD methodology, quality gates, test & fix loops, and explicit execution instructions), /deploy-saas (deployment checklist and validation), /test-rag (RAG engine testing workflow), /sync-db (database synchronization workflow), /update-docs (automatic GitBook documentation sync from code). Agents for: Next.js/React standards, RAG engine review, Drizzle schema, Stripe integration, WordPress plugin, security auditing, accessibility compliance, architecture review, documentation sync. Skills for: RAG development patterns, Next.js SaaS architecture, Drizzle ORM patterns.",
   "author": {
     "name": "WisdmLabs",
     "email": "support@wisdmlabs.com",
     "url": "https://wisdmlabs.com"
   },
   "homepage": "https://aibotkit.io",
-  "repository": "https://github.com/AruneshDev/aibotkit-claude-plugin",
+  "repository": "https://github.com/WisdmLabs/aibotkit-claude-plugin",
   "license": "MIT",
   "keywords": [
     "nextjs",

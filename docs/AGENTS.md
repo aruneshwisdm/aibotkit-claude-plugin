@@ -4,7 +4,7 @@ Complete reference for all AI BotKit Engineering Plugin agents.
 
 ## Overview
 
-The plugin includes 10 specialized agents organized by category:
+The plugin includes 11 specialized agents organized by category:
 
 | Category | Agents | Purpose |
 |----------|--------|---------|
@@ -13,6 +13,7 @@ The plugin includes 10 specialized agents organized by category:
 | Database | 1 | Schema and query patterns |
 | Security | 2 | Security auditing |
 | WordPress | 2 | WordPress standards |
+| Documentation | 1 | Documentation sync and validation |
 
 ---
 
@@ -552,6 +553,76 @@ $wpdb->query($wpdb->prepare(
 **When Invoked:**
 - `/full-review` (always)
 - `/full-review --component wordpress --focus security`
+
+---
+
+## Documentation Agents
+
+### documentation-updater
+
+Synchronizes GitBook documentation with SaaS and WordPress codebases to keep docs accurate.
+
+**What It Checks:**
+
+| Area | Checks |
+|------|--------|
+| Plan Limits | Sync from `checkRateLimit.ts` to docs |
+| Features | Sync from code to feature lists |
+| Links | Validate all internal markdown links |
+| Images | Verify `.gitbook/assets/` references |
+| Structure | SUMMARY.md matches file structure |
+
+**Data Sources:**
+
+| Source | Data Extracted |
+|--------|---------------|
+| `saas/src/lib/checkRateLimit.ts` | Plan limits (chatbots, messages, storage) |
+| `saas/docs/plan-limits.md` | Plan descriptions |
+| `wordpress-plugin/readme.txt` | Plugin features |
+| `saas/src/app/api/` | API endpoints |
+
+**Example Findings:**
+
+```markdown
+### HIGH: Plan Limit Mismatch
+**File:** documentation/plans-and-billing/upgrading-to-paid-plans.md:15
+**Issue:** Basic plan messages incorrect
+
+**Current (in docs):**
+```
+* **Basic** → 3 chatbots, 300 messages/month
+```
+
+**Expected (from code):**
+```
+* **Basic** → 3 chatbots, 500 messages/month
+```
+
+**Source:** saas/src/lib/checkRateLimit.ts:8
+```
+
+**Validation Report:**
+
+```markdown
+## Documentation Validation
+
+### Link Check
+- ✅ 45 internal links valid
+- ❌ 0 broken links
+
+### Image Check
+- ✅ 102 images valid
+- ⚠️ 0 missing images
+
+### Structure Check
+- ✅ SUMMARY.md matches directory structure
+- ✅ 29/29 files listed
+```
+
+**When Invoked:**
+- `/update-docs` (always)
+- `/update-docs --validate`
+- `/next-phase 10` (Documentation phase)
 
 ---
 
