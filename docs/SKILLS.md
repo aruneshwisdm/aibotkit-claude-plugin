@@ -9,6 +9,7 @@ Skills provide domain knowledge and best practices that Claude Code uses when he
 | Skill | Purpose | Use Case |
 |-------|---------|----------|
 | `next-phase` | 21-phase development lifecycle orchestrator | Feature development |
+| `deploy-saas` | SaaS deployment orchestrator with quality gates | Production deployments |
 | `rag-development` | RAG patterns and best practices | Building AI features |
 | `drizzle-patterns` | Drizzle ORM patterns | Database operations |
 | `nextjs-saas` | Next.js SaaS patterns | SaaS development |
@@ -87,6 +88,98 @@ State is persisted in `_project_specs/.next-phase-state.json`:
 # 3. Planning phases with reuse credits
 # 4. Implementation with quality gates
 # 5. Test & fix loops until 100% pass
+```
+
+---
+
+## deploy-saas
+
+**User Invocable:** `/deploy-saas`
+
+SaaS deployment orchestrator with pre-deployment quality gates, state persistence, rollback tracking, and resume capability.
+
+### Invocation
+
+```bash
+/deploy-saas                      # Deploy to staging (default)
+/deploy-saas production           # Deploy to production
+/deploy-saas --dry-run            # Validate without deploying
+/deploy-saas --status             # Show current deployment state
+/deploy-saas --resume             # Resume from failed step
+/deploy-saas --rollback           # Rollback to previous deployment
+```
+
+### Deployment Phases
+
+| Phase | Name | Quality Gate |
+|-------|------|--------------|
+| 1.1 | Environment Variables | All required vars present |
+| 1.2 | Build Validation | Build succeeds, no errors |
+| 1.3 | Migration Check | No high-risk without approval |
+| 1.4 | Security Scan | No critical issues |
+| 2.1 | Database Backup | Backup created (production) |
+| 2.2 | Run Migrations | Migrations applied |
+| 2.3 | Deploy Application | Deployment successful |
+| 3.1 | Health Check | App responding |
+| 3.2 | Functional Tests | Auth, chatbot, chat work |
+| 3.3 | Integration Tests | WordPress, webhooks work |
+| 4 | Generate Report | Report saved |
+
+### State Management
+
+State is persisted in `_project_specs/.deploy-state.json`:
+
+```json
+{
+  "environment": "production",
+  "currentPhase": "2.3",
+  "status": "in_progress",
+  "deployment": {
+    "backupLocation": "backup_20241215_140500.sql",
+    "previousDeploymentUrl": "https://old.vercel.app",
+    "newDeploymentUrl": "https://new.vercel.app"
+  }
+}
+```
+
+### Resume Capability
+
+If deployment fails, state is preserved. Fix the issue and resume:
+
+```bash
+/deploy-saas --resume
+```
+
+### Rollback
+
+If issues are discovered after deployment:
+
+```bash
+/deploy-saas --rollback
+```
+
+This will:
+1. Rollback Vercel to previous deployment
+2. Offer database restore from backup (if applicable)
+
+### When This Skill Applies
+
+- Deploying to staging or production
+- Running pre-deployment validation
+- Rolling back failed deployments
+- Resuming interrupted deployments
+
+### Example Usage
+
+```bash
+> /deploy-saas production
+
+# Orchestrates through:
+# 1. Pre-deployment checks (env, build, migrations, security)
+# 2. Database backup and migrations
+# 3. Application deployment
+# 4. Post-deployment verification
+# 5. Generates deployment report with rollback info
 ```
 
 ---
@@ -557,6 +650,7 @@ Skills are automatically activated when you work on related code:
 | Task | Skills Used |
 |------|-------------|
 | Feature development | `next-phase` |
+| Production deployments | `deploy-saas` |
 | Building chat features | `rag-development`, `nextjs-saas` |
 | Database changes | `drizzle-patterns` |
 | API development | `nextjs-saas`, `drizzle-patterns` |
